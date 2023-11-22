@@ -2,7 +2,6 @@ package com.workshopmongo.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.workshopmongo.domain.User;
@@ -17,7 +16,7 @@ public class UserService {
     return repository.findAll();
   }
 
-  public Optional<User> findById(UUID id) {
+  public Optional<User> findById(String id) {
     return repository.findById(id);
   }
 }

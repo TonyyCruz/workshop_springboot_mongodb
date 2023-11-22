@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.workshopmongo.domain.User;
+import com.workshopmongo.dto.UserDTO;
 import com.workshopmongo.services.UserService;
 
 @RestController
@@ -18,14 +19,16 @@ public class UserResource {
   private UserService service;
 
   @GetMapping
-  public ResponseEntity<List<User>> findAll() {
+  public ResponseEntity<List<UserDTO>> findAll() {
     List<User> users = service.findAll();
-    return ResponseEntity.ok().body(users);
+    List<UserDTO> usersDto = users.stream().map(UserDTO::new).toList();
+    return ResponseEntity.ok().body(usersDto);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<User> findById(@PathVariable String id) {
+  public ResponseEntity<UserDTO> findById(@PathVariable String id) {
     User user = service.findById(id);
-    return ResponseEntity.ok().body(user);
+    UserDTO userDto = new UserDTO(user);
+    return ResponseEntity.ok().body(userDto);
   }
 }

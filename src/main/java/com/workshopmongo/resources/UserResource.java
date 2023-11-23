@@ -8,12 +8,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.workshopmongo.domain.User;
-import com.workshopmongo.dto.UserDTO;
+import com.workshopmongo.dto.UserDto;
 import com.workshopmongo.services.UserService;
 
 @RestController
@@ -24,24 +25,23 @@ public class UserResource {
   private UserService service;
 
   @GetMapping
-  public ResponseEntity<List<UserDTO>> findAll() {
+  public ResponseEntity<List<UserDto>> findAll() {
     List<User> users = service.findAll();
-    List<UserDTO> usersDto = users.stream().map(UserDTO::new).toList();
+    List<UserDto> usersDto = users.stream().map(UserDto::new).toList();
     return ResponseEntity.ok().body(usersDto);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<UserDTO> findById(@PathVariable String id) {
+  public ResponseEntity<UserDto> findById(@PathVariable String id) {
     User user = service.findById(id);
-    return ResponseEntity.ok().body(new UserDTO(user));
+    return ResponseEntity.ok().body(new UserDto(user));
   }
 
   @PostMapping
-  public ResponseEntity<Void> insert(@RequestBody UserDTO userDTO) {
-    User user = UserDTO.toUser(userDTO);
-    User createdUser = service.insert(user);
+  public ResponseEntity<Void> insert(@RequestBody UserDto userDTO) {
+    User user = service.insert(UserDto.toUser(userDTO));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-        .buildAndExpand(createdUser.getId()).toUri();
+        .buildAndExpand(user.getId()).toUri();
     return ResponseEntity.created(uri).build();
   }
 
@@ -49,5 +49,12 @@ public class UserResource {
   public ResponseEntity<Void> delete(@PathVariable String id) {
     service.delete(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<UserDto> update(@PathVariable String id, @RequestBody UserDto userDto) {
+    userDto.setId(id);
+    User user = service.update(UserDto.toUser(userDto));
+    return ResponseEntity.ok().body(new UserDto(user));
   }
 }

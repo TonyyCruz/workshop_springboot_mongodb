@@ -9,20 +9,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDTO implements Serializable {
+public class UserDto implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String id;
   private String name;
   private String email;
 
-  public UserDTO(User user) {
+  public UserDto(User user) {
     id = user.getId();
     name = user.getName();
     email = user.getEmail();
   }
 
-  public static User toUser(UserDTO userDTO) {
+  public static User toUser(UserDto userDTO) {
     User user = new User();
     user.setId(userDTO.getId());
     user.setName(userDTO.getName());

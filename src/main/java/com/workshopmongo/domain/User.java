@@ -2,6 +2,7 @@ package com.workshopmongo.domain;
 
 import java.io.Serializable;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -21,5 +22,6 @@ public class User implements Serializable {
   @Id
   private String id;
   private String name;
+  @Indexed(unique = true)
   private String email;
 }

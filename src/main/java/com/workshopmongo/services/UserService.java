@@ -24,4 +24,8 @@ public class UserService {
     return repository.save(user);
   }
 
+  public void delete(String id) {
+    User user = findById(id);
+    repository.delete(user);
+  }
 }

@@ -13,35 +13,35 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.workshopmongo.domain.User;
-import com.workshopmongo.dto.UserDto;
-import com.workshopmongo.services.UserService;
+import com.workshopmongo.domain.Post;
+import com.workshopmongo.dto.PostDto;
+import com.workshopmongo.services.PostService;
 
 @RestController
-@RequestMapping(value = "/users")
-public class UserResource {
+@RequestMapping(value = "/posts")
+public class PostResource {
 
   @Autowired
-  private UserService service;
+  private PostService service;
 
   @GetMapping
-  public ResponseEntity<List<UserDto>> findAll() {
-    List<User> userList = service.findAll();
-    List<UserDto> usersListDto = userList.stream().map(UserDto::new).toList();
-    return ResponseEntity.ok().body(usersListDto);
+  public ResponseEntity<List<PostDto>> findAll() {
+    List<Post> postList = service.findAll();
+    List<PostDto> postListDto = postList.stream().map(PostDto::new).toList();
+    return ResponseEntity.ok().body(postListDto);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<UserDto> findById(@PathVariable String id) {
-    User user = service.findById(id);
-    return ResponseEntity.ok().body(new UserDto(user));
+  public ResponseEntity<PostDto> findById(@PathVariable String id) {
+    Post post = service.findById(id);
+    return ResponseEntity.ok().body(new PostDto(post));
   }
 
   @PostMapping
-  public ResponseEntity<Void> insert(@RequestBody UserDto userDTO) {
-    User user = service.insert(UserDto.toUser(userDTO));
+  public ResponseEntity<Void> insert(@RequestBody PostDto postDTO) {
+    Post post = service.insert(PostDto.toPost(postDTO));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-        .buildAndExpand(user.getId()).toUri();
+        .buildAndExpand(post.getId()).toUri();
     return ResponseEntity.created(uri).build();
   }
 
@@ -52,9 +52,9 @@ public class UserResource {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<UserDto> update(@PathVariable String id, @RequestBody UserDto userDto) {
-    userDto.setId(id);
-    User user = service.update(UserDto.toUser(userDto));
-    return ResponseEntity.ok().body(new UserDto(user));
+  public ResponseEntity<PostDto> update(@PathVariable String id, @RequestBody PostDto postDto) {
+    postDto.setId(id);
+    Post post = service.update(PostDto.toPost(postDto));
+    return ResponseEntity.ok().body(new PostDto(post));
   }
 }

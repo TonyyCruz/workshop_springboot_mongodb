@@ -2,11 +2,13 @@ package com.workshopmongo.domain;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workshopmongo.dto.AuthorDto;
-import lombok.AllArgsConstructor;
+import com.workshopmongo.dto.CommentDto;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Document(collation = "post")
@@ -24,9 +25,17 @@ public class Post implements Serializable {
   @Id
   private String id;
   private String title;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'",
-      timezone = "GMT")
   private Instant date;
   private String body;
   private AuthorDto author;
+  @Setter(AccessLevel.NONE)
+  private List<CommentDto> comments = new ArrayList<>();
+
+  public Post(String id, String title, Instant date, String body, AuthorDto author) {
+    this.id = id;
+    this.title = title;
+    this.date = date;
+    this.body = body;
+    this.author = author;
+  }
 }

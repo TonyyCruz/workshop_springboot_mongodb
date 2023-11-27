@@ -1,5 +1,6 @@
 package com.workshopmongo.services;
 
+import java.time.Instant;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,5 +19,9 @@ public class PostService {
 
   public List<Post> findByTitle(String text) {
     return repository.findByTitleContainingIgnoreCase(text);
+  }
+
+  public List<Post> searchByTextInDate(String text, Instant startDate, Instant endDate) {
+    return repository.searchByTextAndDate(text, startDate, endDate);
   }
 }
